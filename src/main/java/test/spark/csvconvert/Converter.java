@@ -17,8 +17,8 @@ import java.io.File;
  * Author: julien-diener
  */
 public class Converter {
-    static String appName = "CSV-Conversion";
-    static String master = "local";
+    static String appName = "CSV-Conversion";  // spark app name
+    static String master = "local";            // spark master (see readme for details)
 
     JavaSparkContext sc;
 
