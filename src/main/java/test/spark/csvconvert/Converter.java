@@ -22,9 +22,21 @@ public class Converter {
 
     JavaSparkContext sc;
 
+    /**
+     * Init spark context
+     */
     public Converter(){
         SparkConf conf = new SparkConf().setAppName(appName).setMaster(master);
         sc = new JavaSparkContext(conf);
+    }
+
+    /**
+     * The conversion using spark
+     */
+    public void convertFile(String inputFile, String outputDir){
+        JavaRDD<String> inputRdd = sc.textFile(inputFile);
+        JavaRDD<String> outputRdd = inputRdd.map(Converter::convertLine);
+        outputRdd.saveAsTextFile(outputDir);
     }
 
     /**
@@ -39,12 +51,10 @@ public class Converter {
         return line.toUpperCase();
     }
 
-    public void convertFile(String inputFile, String outputDir){
-        JavaRDD<String> inputRdd = sc.textFile(inputFile);
-        JavaRDD<String> outputRdd = inputRdd.map(Converter::convertLine);
-        outputRdd.saveAsTextFile(outputDir);
-    }
 
+    /**
+     * As a stand-alone app
+     */
     public static void main(String[] args){
         if(args.length!=2) {
             System.out.println("Invalid number of arguments. Usage: Converter inputFile outputDir");
