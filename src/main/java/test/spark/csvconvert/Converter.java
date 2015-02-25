@@ -1,10 +1,10 @@
 package test.spark.csvconvert;
 
+import org.apache.hadoop.fs.FileUtil;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
-
-import org.apache.hadoop.fs.FileUtil;
+import org.apache.spark.api.java.function.Function;
 
 import java.io.File;
 
@@ -16,28 +16,9 @@ import java.io.File;
  *
  * Author: julien-diener
  */
-public class Converter {
+public final class Converter {
     static String appName = "CSV-Conversion";  // spark app name
     static String master = "local";            // spark master (see readme for details)
-
-    JavaSparkContext sc;
-
-    /**
-     * Init spark context
-     */
-    public Converter(){
-        SparkConf conf = new SparkConf().setAppName(appName).setMaster(master);
-        sc = new JavaSparkContext(conf);
-    }
-
-    /**
-     * The conversion using spark
-     */
-    public void convertFile(String inputFile, String outputDir){
-        JavaRDD<String> inputRdd = sc.textFile(inputFile);
-        JavaRDD<String> outputRdd = inputRdd.map(Converter::convertLine);
-        outputRdd.saveAsTextFile(outputDir);
-    }
 
     /**
      * The function that convert each file line.
@@ -52,12 +33,9 @@ public class Converter {
     }
 
 
-    /**
-     * As a stand-alone app
-     */
     public static void main(String[] args){
         if(args.length!=2) {
-            System.out.println("Invalid number of arguments. Usage: Converter inputFile outputDir");
+            System.out.println("Invalid number of arguments. Usage: HdfsCsvConverter inputFile outputDir");
             System.exit(1);
         }
 
@@ -66,7 +44,24 @@ public class Converter {
 
         FileUtil.fullyDelete(new File(outputDir));
 
-        Converter c = new Converter();
-        c.convertFile(inputFile,outputDir);
+        // Init spark context
+        SparkConf conf = new SparkConf().setAppName(appName).setMaster(master);
+        JavaSparkContext sc = new JavaSparkContext(conf);
+
+        // file conversion using spark
+        JavaRDD<String> inputRdd = sc.textFile(inputFile);
+        //   for Java 8:
+        //   JavaRDD<String> outputRdd = inputRdd.map(Converter::convertLine);
+
+        //   for Java 7:
+        Function fct = new Function<String,String>() {
+            @Override
+            public String call(String line) throws Exception {
+                return convertLine(line);
+            }
+        };
+        JavaRDD<String> outputRdd = inputRdd.map(fct);
+
+        outputRdd.saveAsTextFile(outputDir);
     }
 }
