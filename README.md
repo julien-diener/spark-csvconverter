@@ -15,4 +15,5 @@ Author: julien-diener
 
 **To run:**
 
-    java -cp "HdfsCsvConverter.jar:/path/to/spark-assembly-1.1.1-hadoop2.4.0.jar" test.spark.csvconvert.Converter inputFile outputDir
+    java -cp "HdfsCsvConverter.jar:/path/to/spark-assembly-1.1.1-hadoop2.4.0.jar" \
+         test.spark.csvconvert.Converter inputFile outputDir
