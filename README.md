@@ -7,7 +7,7 @@ Also, the output are part files such as produced by map-reduce.
 This example is made to run locally.
 See [this](https://spark.apache.org/docs/1.1.1/programming-guide.html#initializing-spark) for more details
 
-Author: julien-diener
+Author: [julien-diener](https://github.com/julien-diener)
 
 **Compilation using maven:**
 
