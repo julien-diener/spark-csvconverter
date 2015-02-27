@@ -1,11 +1,12 @@
 
 A simple java program to convert csv files on HDFS to another csv format, using spark.
 
-More precisely, the constraint is that each line can be converted independently.
-Also, the output are part files such as produced by map-reduce.
+More precisely, any text file can be converted if all lines can be converted independently.
 
-This example is primarily made to run locally, but can run on a spark cluster depending on the (1st) argument.
-See the run section below fopr more details.
+This can run locally or on a spark cluster (see the `-master` argument)
+and on local FS or on hdfs (see the `-namenode` argument).
+
+Output are part files such as produced by map-reduce.
 
 Author: [julien-diener](https://github.com/julien-diener)
 
@@ -16,25 +17,27 @@ Author: [julien-diener](https://github.com/julien-diener)
 **Run:**
 
     java -cp "HdfsCsvConverter.jar:/path/to/spark-assembly-1.1.1-hadoop2.4.0.jar" \
-         test.spark.csvconvert.Converter local /input/file /output/dir
+         hdfs.csvconvert.Converter \
+         [-master   spark://xxxxx:pppp] \
+         [-namenode hdfs://yyyyyy:pppp] \
+         /input/file /output/dir
 
-    java -cp "HdfsCsvConverter.jar:/path/to/spark-assembly-1.1.1-hadoop2.4.0.jar" \
-         test.spark.csvconvert.Converter spark://host:port /input/file /output/file
-
-The first argument define how/where to run spark. This is the `master` parameter
-[described here](https://spark.apache.org/docs/1.1.1/programming-guide.html#initializing-spark).
 
 <dl>
-  <dt>local</dt>
-  <dd>Run locally<dd>
+  <dt>-master (optional)</dt>
+  <dd>By default spark run locally (-master local) but other spark master can be used. See the `master` parameter
+      [described here](https://spark.apache.org/docs/1.1.1/programming-guide.html#initializing-spark). For example,
+      the address of a spark master can be given. </dd>
 
-  <dt>spark://host:port</dt>
-  <dd>Run on spark cluster where `host:port` is the address of the spark master</dd>
+  <dt>-namenode (optional)</dt>
+  <dd>By default, the /input/file and /output/dir are looked on the computer running the program. The namenode option
+      can be used to give the address of the HDFS namenode, in which case the input and output will be on the HDFS </dd>
+
+  <dt>/input/file</dt>
+  <dd>Path to the file to convert</dd>
+
+  <dt>/output/dir</dt>
+  <dd>Path to the directory where the output file is stored as map-reduce part files</dd>
 </dl>
 
-The second and third arguments are the input file and the output directory (where the output file is stored as
-map-reduce part files). If it is of the form `/some/folder/some/file-or-dir` then it works on local disc.
-To run on hdfs, the format `hdfs://host:port/some/file-or-dir` where `host:port` is the hdfs ipc interface.
-Note however that in the later case,
-the deletion of the output folder preceding the file conversion does not work: if it already exist, the output folder
-should be deleted manually before running the conversion.
+The output folder is deleted before running the conversion, if it exists.

@@ -14,7 +14,12 @@
     <dependency>
         <groupId>org.apache.spark</groupId>
         <artifactId>spark-core_2.10</artifactId>
-        <version>1.1.1</version>
+        <version>1.1.0</version>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.hadoop</groupId>
+        <artifactId>hadoop-core</artifactId>
+        <version>0.20.2</version>
     </dependency>
     <dependency>
         <groupId>org.apache.hadoop</groupId>
@@ -42,7 +47,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>test.spark.csvconvert.Converter</mainClass>
+                            <mainClass>hdfs.csvconvert.Converter</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
