@@ -21,18 +21,20 @@ Author: [julien-diener](https://github.com/julien-diener)
     java -cp "HdfsCsvConverter.jar:/path/to/spark-assembly-1.1.1-hadoop2.4.0.jar" \
          test.spark.csvconvert.Converter spark://host:port /input/file /output/file
 
- In the first argument define how/where to run spark. See
- [this](https://spark.apache.org/docs/1.1.1/programming-guide.html#initializing-spark)
- for more details on this parameter.
+The first argument define how/where to run spark. See
+[this](https://spark.apache.org/docs/1.1.1/programming-guide.html#initializing-spark)
+for more details on this parameter.
 
-local
-    Run locally
+<dl>
+  <dt>local</dt>
+  <dd>Run locally<dd>
 
-spark-client
-    Should work with a spark client. I don't know how to configure it
+  <dt>spark-client</dt>
+  <dd>Should work with a spark client. I don't know how to configure it</dd>
 
-spark://host:port
-    Run with spark where host:port is the address of the spark master.
+  <dt>spark://host:port</dt>
+  <dd>Run with spark where host:port is the address of the spark master.</dd>
+</dl>
 
 The second and third arguments are the input file and the output directory to store the output file as map-reduce part
 files. If it is of the form `/some/folder/some/file-or-dir` then it works on local disc. To run on hdfs, the format
