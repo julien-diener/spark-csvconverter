@@ -7,6 +7,7 @@ import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Provides a simple example of using spark to convert csv file.
@@ -18,7 +19,8 @@ import java.io.File;
  */
 public final class Converter {
     static String appName = "CSV-Conversion";  // spark app name
-    static String master = "local";            // spark master (see readme for details)
+    //static String master = "local";            // spark master: local run (see readme for details)
+    //static String master = "yarn-client";      // spark master:  run with yarn (see readme for details)
 
     /**
      * The function that convert each file line.
@@ -34,18 +36,33 @@ public final class Converter {
 
 
     public static void main(String[] args){
-        if(args.length!=2) {
-            System.out.println("Invalid number of arguments. Usage: HdfsCsvConverter inputFile outputDir");
+        if(args.length!=3) {
+            System.out.println("Invalid number of arguments");
+            System.out.println("  Usage:  HdfsCsvConverter [local|yarn-client|spark://xxx:yy] inputFile outputDir");
             System.exit(1);
         }
 
-        String inputFile = args[0];
-        String outputDir = args[1];
+        String inputFile = args[1];
+        String outputDir = args[2];
 
-        FileUtil.fullyDelete(new File(outputDir));
+        System.out.println("\n\n *****************************");
+        File output = new File(outputDir);
+        System.out.println(output.getPath());
+        try {
+            for (String filename : FileUtil.list(output))
+                System.out.println(" - " + filename);
+        }catch (IOException e){
+            System.out.println("could not read folder:"+e);
+        }
+        boolean deleted = FileUtil.fullyDelete(new File(outputDir));
+        System.out.println(" *****************************\n\n");
+
 
         // Init spark context
-        SparkConf conf = new SparkConf().setAppName(appName).setMaster(master);
+        SparkConf conf = new SparkConf().setAppName(appName);
+        conf.setMaster(args[0]);
+        conf.setJars(JavaSparkContext.jarOfClass(Converter.class));
+
         JavaSparkContext sc = new JavaSparkContext(conf);
 
         // file conversion using spark
