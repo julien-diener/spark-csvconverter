@@ -7,7 +7,7 @@ More precisely:
  - It can run locally or on a spark cluster (see the `-master` argument)
  - It can run on the local FS or on hdfs (see the `-namenode` argument)
  - Output are part files such as produced by map-reduce
- - The output folder is deleted before running the conversion, if it exists.
+ - If it exists, the output folder is deleted before running the conversion
 
 Author: [julien-diener](https://github.com/julien-diener)
 
