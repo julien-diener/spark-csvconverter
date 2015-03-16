@@ -1,13 +1,13 @@
 
 A simple java program to convert csv files on HDFS to another csv format, using spark.
 
-More precisely, any text file can be converted if all lines can be converted independently.
+More precisely:
 
-This can run locally or on a spark cluster (see the `-master` argument)
-and on local FS or on hdfs (see the `-namenode` argument).
-
-The output folder is deleted before running the conversion, if it exists.
-Output are part files such as produced by map-reduce.
+ - Any text file can be converted if all lines can be converted independently
+ - It can run locally or on a spark cluster (see the `-master` argument)
+ - It can run on the local FS or on hdfs (see the `-namenode` argument)
+ - Output are part files such as produced by map-reduce
+ - The output folder is deleted before running the conversion, if it exists.
 
 Author: [julien-diener](https://github.com/julien-diener)
 
@@ -41,5 +41,5 @@ Path to the file to convert
 
 `/output/dir`
 
-Path to the directory where the output file is stored as map-reduce part files
+Path to the output directory, where the output is stored as map-reduce part files
 
