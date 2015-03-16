@@ -9,7 +9,7 @@ More precisely:
  - Output are part files such as produced by map-reduce
  - If it exists, the output folder is deleted before running the conversion
 
-Author: [julien-diener](https://github.com/julien-diener)
+Author: [julien-diener](https://julien.diener.website)
 
 **Compilation using maven:**
 
